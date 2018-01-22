@@ -1,0 +1,3 @@
+post:
+    resource: App\Controller\IssueController
+    type:     annotation
