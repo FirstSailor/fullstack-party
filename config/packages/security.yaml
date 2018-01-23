@@ -1,0 +1,23 @@
+security:
+    providers:
+        oauth:
+            id: App\Security\GithubUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            logout:
+                path: /logout
+                target: /login
+
+            guard:
+                authenticators:
+                    - App\Security\GithubOauthAuthenticator
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
