@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
+use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IssueController extends AbstractController
+class IssueController extends Controller
 {
     /**
-     * @Route("/", name="test")
+     * @Route("/list", name="app.issue.list")
      * @Template("base.html.twig")
+     *
      * @return array
      */
-    public function issuesListAction()
+    public function listAction(): array
     {
+
+
         return [];
     }
 }

@@ -1,3 +1,18 @@
-post:
+github_oauth:
+    resource: App\Controller\GithubOauthController
+    type: annotation
+    prefix: /connect
+
+logout:
+    path: /logout
+
+login:
+    path: /login
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: login.html.twig
+
+issue_controller:
     resource: App\Controller\IssueController
-    type:     annotation
+    type: annotation
+    prefix: /issue
