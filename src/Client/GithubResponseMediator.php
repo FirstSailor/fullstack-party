@@ -14,10 +14,7 @@ class GithubResponseMediator
     {
         $body = (string) $response->getBody();
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
-            $content = json_decode($body, true);
-            if (JSON_ERROR_NONE === json_last_error()) {
-                return $content;
-            }
+            return \GuzzleHttp\json_decode($body, true);
         }
 
         return $body;
@@ -27,7 +24,7 @@ class GithubResponseMediator
      * @param ResponseInterface $response
      * @return array|null
      */
-    public static function getPagination(ResponseInterface $response): ?array
+    public static function getPaginationData(ResponseInterface $response): ?array
     {
         if (!$response->hasHeader('Link')) {
             return null;
@@ -38,7 +35,7 @@ class GithubResponseMediator
         foreach (explode(',', $header) as $link) {
             preg_match('/<(.*)>; rel="(.*)"/i', trim($link, ','), $match);
 
-            if (3 === count($match)) {
+            if (count($match) === 3) {
                 $pagination[$match[2]] = $match[1];
             }
         }

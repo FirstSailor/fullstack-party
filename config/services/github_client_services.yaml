@@ -9,16 +9,46 @@ services:
                     Accept: 'application/vnd.github.v3+json'
                 operations:
                     getPaginatedIssues:
-                        process: false
                         httpMethod: 'GET'
                         uri: '/issues?page={page}&per_page={per_page}'
-                        responseClass: 'jsonOutput'
                         parameters:
                             page:
                                 location: uri
                                 type: integer
                                 required: true
                             per_page:
+                                location: uri
+                                type: integer
+                                required: true
+                    getSingleIssue:
+                        httpMethod: 'GET'
+                        uri: '/repos/{owner}/{repo}/issues/{number}'
+                        parameters:
+                            owner:
+                                location: uri
+                                type: string
+                                required: true
+                            repo:
+                                location: uri
+                                type: string
+                                required: true
+                            number:
+                                location: uri
+                                type: integer
+                                required: true
+                    getIssueComments:
+                        httpMethod: 'GET'
+                        uri: '/repos/{owner}/{repo}/issues/{number}/comments'
+                        parameters:
+                            owner:
+                                location: uri
+                                type: string
+                                required: true
+                            repo:
+                                location: uri
+                                type: string
+                                required: true
+                            number:
                                 location: uri
                                 type: integer
                                 required: true
@@ -30,3 +60,9 @@ services:
         arguments:
             - '@app.github.client_description'
             - '@App\Manager\GithubUserManager'
+
+    app.github.repository:
+        class: App\Repository\GithubRepository
+        public: true
+        arguments:
+            - '@app.github.client'

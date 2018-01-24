@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Client\GithubResponseMediator;
+use App\Repository\GithubRepository;
 use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +21,9 @@ class IssueController extends Controller
     {
 
         try {
-            $out = $this->get('app.github.client')->getPaginatedIssues(['page' => 1, 'per_page' => 1]);
+            $out = $this->get('app.github.repository')->getPaginatedIssues();
+
+            dump($out);die;
 
             dump(GithubResponseMediator::getContent($out), GithubResponseMediator::getPagination($out));
             die;
