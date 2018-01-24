@@ -1,0 +1,76 @@
+services:
+    app.github.client_description:
+        class: GuzzleHttp\Command\Guzzle\Description
+        factory: 'App\Factory\ClientDescriptionFactory:create'
+        arguments:
+            -
+                baseUri: 'https://api.github.com/'
+                headers:
+                    Accept: 'application/vnd.github.v3+json'
+                operations:
+                    getPaginatedIssues:
+                        httpMethod: 'GET'
+                        uri: '/issues?page={page}&per_page={per_page}'
+                        parameters:
+                            page:
+                                location: uri
+                                type: integer
+                                required: true
+                            per_page:
+                                location: uri
+                                type: integer
+                                required: true
+                    getSingleIssue:
+                        httpMethod: 'GET'
+                        uri: '/repos/{owner}/{repo}/issues/{number}'
+                        parameters:
+                            owner:
+                                location: uri
+                                type: string
+                                required: true
+                            repo:
+                                location: uri
+                                type: string
+                                required: true
+                            number:
+                                location: uri
+                                type: integer
+                                required: true
+                    getIssueComments:
+                        httpMethod: 'GET'
+                        uri: '/repos/{owner}/{repo}/issues/{number}/comments'
+                        parameters:
+                            owner:
+                                location: uri
+                                type: string
+                                required: true
+                            repo:
+                                location: uri
+                                type: string
+                                required: true
+                            number:
+                                location: uri
+                                type: integer
+                                required: true
+
+    app.github.client:
+        class: App\Client\GithubClient
+        public: true
+        factory: 'App\Factory\GithubClientFactory:create'
+        arguments:
+            - '@app.github.client_description'
+            - '@App\Manager\GithubUserManager'
+
+    app.github.repository:
+        class: App\Repository\GithubRepository
+        public: true
+        arguments:
+            - '@app.github.client'
+
+    app.github.paginated_data_manager:
+        class: App\Manager\GithubPaginatedDataManager
+        public: true
+        arguments:
+            - '@app.github.repository'
+            - '@App\Client\GithubResponseMediator'
+            - '%env(ISSUES_PER_PAGE)%'
