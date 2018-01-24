@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('app.github_oauth.connect') }}">Jungtis</a>
+    <div class="login-background">
+        <div class="login-container">
+            <div class="login-logo"></div>
+            <div class="login-button"><a href="{{ path('app.github_oauth.connect') }}">Login With GitHub</a></div>
+        </div>
+    </div>
 {% endblock %}

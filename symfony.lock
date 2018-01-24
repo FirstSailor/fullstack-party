@@ -1,1 +1,5 @@
-[]
+{
+    "symfony/asset": {
+        "version": "v4.0.3"
+    }
+}

@@ -88,7 +88,7 @@ class GithubOauthAuthenticator extends SocialAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return new RedirectResponse($this->router->generate('app.issue.list'));
+        return new RedirectResponse($this->router->generate('app.issue.list_issues'));
     }
 
     /**

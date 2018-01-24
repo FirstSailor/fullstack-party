@@ -12,6 +12,13 @@ login:
     defaults:
         template: login.html.twig
 
+homepage:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: app.issue.list_issues
+        permanent: true
+
 issue_controller:
     resource: App\Controller\IssueController
     type: annotation
