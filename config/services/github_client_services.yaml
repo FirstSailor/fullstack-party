@@ -1,0 +1,32 @@
+services:
+    app.github.client_description:
+        class: GuzzleHttp\Command\Guzzle\Description
+        factory: 'App\Factory\ClientDescriptionFactory:create'
+        arguments:
+            -
+                baseUri: 'https://api.github.com/'
+                headers:
+                    Accept: 'application/vnd.github.v3+json'
+                operations:
+                    getPaginatedIssues:
+                        process: false
+                        httpMethod: 'GET'
+                        uri: '/issues?page={page}&per_page={per_page}'
+                        responseClass: 'jsonOutput'
+                        parameters:
+                            page:
+                                location: uri
+                                type: integer
+                                required: true
+                            per_page:
+                                location: uri
+                                type: integer
+                                required: true
+
+    app.github.client:
+        class: App\Client\GithubClient
+        public: true
+        factory: 'App\Factory\GithubClientFactory:create'
+        arguments:
+            - '@app.github.client_description'
+            - '@App\Manager\GithubUserManager'

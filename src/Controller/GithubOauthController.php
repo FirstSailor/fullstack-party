@@ -15,7 +15,7 @@ class GithubOauthController extends Controller
      */
     public function connectAction(): RedirectResponse
     {
-        return $this->get('oauth2.registry')->getClient('github')->redirect();
+        return $this->get('oauth2.registry')->getClient('github')->redirect(['user:email', 'public_repo']);
     }
 
     /**
