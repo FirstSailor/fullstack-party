@@ -66,3 +66,11 @@ services:
         public: true
         arguments:
             - '@app.github.client'
+
+    app.github.paginated_data_manager:
+        class: App\Manager\GithubPaginatedDataManager
+        public: true
+        arguments:
+            - '@app.github.repository'
+            - '@App\Client\GithubResponseMediator'
+            - '%env(ISSUES_PER_PAGE)%'

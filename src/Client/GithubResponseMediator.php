@@ -8,23 +8,24 @@ class GithubResponseMediator
 {
     /**
      * @param ResponseInterface $response
-     * @return array|string
+     * @return array
+     * @throws \InvalidArgumentException
      */
-    public static function getContent(ResponseInterface $response)
+    public function getContent(ResponseInterface $response): array
     {
         $body = (string) $response->getBody();
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
             return \GuzzleHttp\json_decode($body, true);
         }
 
-        return $body;
+        throw new \InvalidArgumentException('Response content must be type of json');
     }
 
     /**
      * @param ResponseInterface $response
      * @return array|null
      */
-    public static function getPaginationData(ResponseInterface $response): ?array
+    public function getPaginationData(ResponseInterface $response): ?array
     {
         if (!$response->hasHeader('Link')) {
             return null;
@@ -45,10 +46,29 @@ class GithubResponseMediator
 
     /**
      * @param ResponseInterface $response
+     * @return int|null
+     */
+    public function getTotalResultsCount(ResponseInterface $response): ?int
+    {
+        $paginationData = $this->getPaginationData($response);
+
+        if (isset($paginationData['last']) && preg_match('/\?page=(\d+)/', $paginationData['last'], $pagesCount)) {
+            return (int) array_pop($pagesCount);
+        }
+
+        if (isset($paginationData['prev']) && preg_match('/\?page=(\d+)/', $paginationData['prev'], $pagesCount)) {
+            return (int) array_pop($pagesCount) + 1;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param ResponseInterface $response
      * @param string $name
      * @return string|null
      */
-    public static function getHeader(ResponseInterface $response, string $name): ?string
+    public function getHeader(ResponseInterface $response, string $name): ?string
     {
         $headers = $response->getHeader($name);
 
