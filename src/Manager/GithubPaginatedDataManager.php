@@ -4,8 +4,8 @@ namespace App\Manager;
 
 use App\Client\GithubResponseMediator;
 use App\Factory\FixedPagerFactory;
-use App\Model\Issue;
-use App\Model\IssueState;
+use App\Model\Github\Issue;
+use App\Model\Github\IssueState;
 use App\Repository\GithubRepository;
 use Pagerfanta\Pagerfanta;
 use Psr\Http\Message\ResponseInterface;
@@ -47,12 +47,7 @@ class GithubPaginatedDataManager extends GithubDataManager
     public function getIssuesPager(int $page): Pagerfanta
     {
         $response = $this->repository->getPaginatedIssuesResponse($page, $this->issuesPerPage, IssueState::ALL);
-        $content = array_map(
-            function (array $item) {
-                return new Issue($item);
-            },
-            $this->parseResponse($response)
-        );
+        $content = $this->parseResponse($response, sprintf('array<%s>', Issue::class));
 
         $pager = $this->pagerFactory->create($content, $this->getTotalResultsCount($response));
         $pager->setMaxPerPage($this->issuesPerPage);

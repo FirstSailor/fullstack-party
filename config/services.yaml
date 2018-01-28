@@ -29,6 +29,7 @@ services:
 
     App\Client\GithubResponseMediator:
         public: true
+        arguments: ['@jms_serializer']
 
 imports:
     - { resource: services/github_services.yaml }

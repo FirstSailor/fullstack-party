@@ -3,8 +3,8 @@
 namespace App\Manager;
 
 use App\Client\GithubResponseMediator;
-use App\Model\Comment;
-use App\Model\Issue;
+use App\Model\Github\Comment;
+use App\Model\Github\Issue;
 use App\Repository\GithubRepository;
 use Psr\Http\Message\ResponseInterface;
 
@@ -40,7 +40,7 @@ class GithubDataManager
     {
         $response = $this->repository->getSingleIssueResponse($owner, $repo, $number);
 
-        return new Issue($this->parseResponse($response));
+        return $this->parseResponse($response, Issue::class);
     }
 
     /**
@@ -53,20 +53,16 @@ class GithubDataManager
     {
         $response = $this->repository->getIssueCommentsResponse($owner, $repo, $number);
 
-        return array_map(
-            function (array $item) {
-                return new Comment($item);
-            },
-            $this->parseResponse($response)
-        );
+        return $this->parseResponse($response, sprintf('array<%s>', Comment::class));
     }
 
     /**
      * @param ResponseInterface $response
-     * @return array
+     * @param string|null $deserializationType
+     * @return mixed
      */
-    protected function parseResponse(ResponseInterface $response): array
+    protected function parseResponse(ResponseInterface $response, string $deserializationType = null)
     {
-        return $this->responseMediator->getContent($response);
+        return $this->responseMediator->getContent($response, $deserializationType);
     }
 }

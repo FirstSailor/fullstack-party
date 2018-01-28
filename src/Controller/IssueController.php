@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Model\IssueState;
+use App\Model\Github\IssueState;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

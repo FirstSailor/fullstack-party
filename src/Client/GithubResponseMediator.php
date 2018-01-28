@@ -2,20 +2,38 @@
 
 namespace App\Client;
 
+use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class GithubResponseMediator
 {
     /**
-     * @param ResponseInterface $response
-     * @return array
-     * @throws \InvalidArgumentException
+     * @var SerializerInterface
      */
-    public function getContent(ResponseInterface $response): array
+    protected $serializer;
+
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param string|null $deserializationType
+     * @return mixed
+     */
+    public function getContent(ResponseInterface $response, string $deserializationType = null)
     {
         $body = (string) $response->getBody();
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
-            return \GuzzleHttp\json_decode($body, true);
+            if (null === $deserializationType) {
+                return \GuzzleHttp\json_decode($body, true);
+            }
+
+            return $this->serializer->deserialize($body, $deserializationType, 'json');
         }
 
         throw new \InvalidArgumentException('Response content must be type of json');
