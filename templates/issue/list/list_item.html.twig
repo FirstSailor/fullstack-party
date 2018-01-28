@@ -20,7 +20,7 @@
                     {% endfor %}
                 </div>
                 <div class="description">
-                    #{{ item.number }} {{ 'issues.list.opened'|trans }} {{ item.createdAt|date('Y-m-d') }} {{ 'issues.list.by'|trans }} <span class="owner">{{ item.user.login }}</span>
+                    #{{ item.number }} {{ 'issues.list.opened'|trans }} {{ item.createdAt|timeAgo }} {{ 'issues.list.by'|trans }} <span class="owner">{{ item.user.login }}</span>
                 </div>
             </div>
             <div class="col-md-1 comments">

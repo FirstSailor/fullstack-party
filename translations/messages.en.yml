@@ -10,3 +10,5 @@ issues:
         opened: opened
     entry:
         back_to_list: Back to issues
+        openend_this_issue: opened this issue
+        comments: Comments

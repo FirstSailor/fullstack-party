@@ -31,8 +31,8 @@
                                 </span>
 
                                 <span>{{ issue.user.login }}</span>
-                                <span>opened this issue {{ issue.createdAt|date('Y-m-d') }} days ago</span>
-                                <span>{{ issue.comments }} comments</span>
+                                <span>{{ 'issues.entry.openend_this_issue'|trans }} {{ issue.createdAt|timeAgo }}</span>
+                                <span>{{ issue.comments }} {{ 'issues.entry.comments'|trans }}</span>
                             </div>
                         </div>
                     </div>
