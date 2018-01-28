@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\IssueState;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -10,8 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class IssueController extends Controller
 {
     /**
-     * @Route("/{page}", name="app.issue.list_issues", defaults={"page": 1}, requirements={"page": "\d+"})
-     * @Template("base.html.twig")
+     * @Route("/issues/{page}", name="app.issue.list_issues", defaults={"page": 1}, requirements={"page": "\d+"})
+     * @Template("issue/list/index.html.twig")
      *
      * @param int $page
      * @return array
@@ -19,8 +20,12 @@ class IssueController extends Controller
     public function listIssuesAction(int $page)
     {
         try {
+            $dataManager = $this->get('app.github.paginated_data_manager');
+
             return [
-                'pager' => $this->get('app.github.paginated_data_manager')->getIssuesPager($page)
+                'pager' => $dataManager->getIssuesPager($page),
+                'openCount' => $dataManager->getIssuesCountByState(IssueState::OPEN),
+                'closedCount' => $dataManager->getIssuesCountByState(IssueState::CLOSED),
             ];
         } catch (\Exception $e) {
             throw new NotFoundHttpException();
@@ -29,46 +34,25 @@ class IssueController extends Controller
 
     /**
      * @Route(
-     *     "/{owner}/{repo}/{number}",
+     *     "/issue/{owner}/{repo}/{number}",
      *     name="app.issue.single_issue",
      *     requirements={"owner": "\S+", "repo": "\S+", "number": "\d+"}
      * )
-     * @Template("base.html.twig")
+     * @Template("issue/entry/index.html.twig")
      *
      * @param string $owner
      * @param string $repo
      * @param int $number
      * @return array
      */
-    public function singleIssueAction(string $owner, string $repo, int $number)
+    public function issueAction(string $owner, string $repo, int $number)
     {
         try {
-            return [
-                'data' => $this->get('app.github.repository')->getSingleIssue($owner, $repo, $number)
-            ];
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException();
-        }
-    }
+            $dataManager = $this->get('app.github.data_manager');
 
-    /**
-     * @Route(
-     *     "/{owner}/{repo}/{number}/comments",
-     *     name="app.issue.issue_comments",
-     *     requirements={"owner": "\S+", "repo": "\S+", "number": "\d+"}
-     * )
-     * @Template("base.html.twig")
-     *
-     * @param string $owner
-     * @param string $repo
-     * @param int $number
-     * @return array
-     */
-    public function issueCommentsAction(string $owner, string $repo, int $number)
-    {
-        try {
             return [
-                'data' => $this->get('app.github.repository')->getIssueComments($owner, $repo, $number)
+                'issue' => $dataManager->getSingleIssue($owner, $repo, $number),
+                'comments' => $dataManager->getIssueComments($owner, $repo, $number),
             ];
         } catch (\Exception $e) {
             throw new NotFoundHttpException();

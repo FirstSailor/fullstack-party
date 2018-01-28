@@ -1,0 +1,46 @@
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: $font;
+  font-size: 13px;
+  font-weight: 300;
+  color: $grey-dark;
+  background-color: $grey-light;
+}
+
+.header {
+  width: 100%;
+  height: 120px;
+  position: fixed;
+  top: 0;
+  border-bottom: 1px solid $grey;
+  padding: 40px 60px;
+  background-color: $white;
+
+  .header-logo {
+    height: 30px;
+    width: auto;
+  }
+
+  .header-logout {
+    color: $grey-dark;
+
+    &:hover {
+      color: $green-light;
+    }
+  }
+}
+
+.content {
+  height: 100%;
+  position: relative;
+  padding: 120px 0 0 0;
+  margin: 0;
+}
+
+.green {
+  color: $green;
+}

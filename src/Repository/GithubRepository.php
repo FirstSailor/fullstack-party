@@ -23,11 +23,12 @@ class GithubRepository
     /**
      * @param int $page
      * @param int $perPage
+     * @param string $state
      * @return ResponseInterface
      */
-    public function getPaginatedIssues(int $page, int $perPage): ResponseInterface
+    public function getPaginatedIssuesResponse(int $page, int $perPage, string $state): ResponseInterface
     {
-        return $this->call('getPaginatedIssues', ['page' => $page, 'per_page' => $perPage]);
+        return $this->call('getPaginatedIssues', ['page' => $page, 'per_page' => $perPage, 'state' => $state]);
     }
 
     /**
@@ -36,7 +37,7 @@ class GithubRepository
      * @param int $number
      * @return ResponseInterface
      */
-    public function getSingleIssue(string $owner, string $repo, int $number): ResponseInterface
+    public function getSingleIssueResponse(string $owner, string $repo, int $number): ResponseInterface
     {
         return $this->call('getSingleIssue', ['owner' => $owner, 'repo' => $repo, 'number' => $number]);
     }
@@ -47,7 +48,7 @@ class GithubRepository
      * @param int $number
      * @return ResponseInterface
      */
-    public function getIssueComments(string $owner, string $repo, int $number): ResponseInterface
+    public function getIssueCommentsResponse(string $owner, string $repo, int $number): ResponseInterface
     {
         return $this->call('getIssueComments', ['owner' => $owner, 'repo' => $repo, 'number' => $number]);
     }
@@ -55,9 +56,9 @@ class GithubRepository
     /**
      * @param string $operation
      * @param array $arguments
-     * @return \GuzzleHttp\Command\ResultInterface|mixed
+     * @return ResponseInterface
      */
-    protected function call(string $operation, array $arguments = [])
+    protected function call(string $operation, array $arguments = []): ResponseInterface
     {
         return $this->client->execute(
             $this->client->getCommand($operation, $arguments)

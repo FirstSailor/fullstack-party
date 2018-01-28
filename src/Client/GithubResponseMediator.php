@@ -48,7 +48,7 @@ class GithubResponseMediator
      * @param ResponseInterface $response
      * @return int|null
      */
-    public function getTotalResultsCount(ResponseInterface $response): ?int
+    public function getTotalPagesCount(ResponseInterface $response): ?int
     {
         $paginationData = $this->getPaginationData($response);
 

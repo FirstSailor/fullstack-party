@@ -3,22 +3,19 @@
 namespace App\Manager;
 
 use App\Client\GithubResponseMediator;
+use App\Factory\FixedPagerFactory;
+use App\Model\Issue;
+use App\Model\IssueState;
 use App\Repository\GithubRepository;
-use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Http\Message\ResponseInterface;
 
-class GithubPaginatedDataManager
+class GithubPaginatedDataManager extends GithubDataManager
 {
     /**
-     * @var GithubRepository
+     * @var FixedPagerFactory
      */
-    protected $repository;
-
-    /**
-     * @var GithubResponseMediator
-     */
-    protected $responseMediator;
+    protected $pagerFactory;
 
     /**
      * @var int
@@ -28,15 +25,18 @@ class GithubPaginatedDataManager
     /**
      * @param GithubRepository $repository
      * @param GithubResponseMediator $responseMediator
+     * @param FixedPagerFactory $pagerFactory
      * @param int $issuesPerPage
      */
     public function __construct(
         GithubRepository $repository,
         GithubResponseMediator $responseMediator,
+        FixedPagerFactory $pagerFactory,
         int $issuesPerPage
     ) {
-        $this->repository = $repository;
-        $this->responseMediator = $responseMediator;
+        parent::__construct($repository, $responseMediator);
+
+        $this->pagerFactory = $pagerFactory;
         $this->issuesPerPage = $issuesPerPage;
     }
 
@@ -46,11 +46,15 @@ class GithubPaginatedDataManager
      */
     public function getIssuesPager(int $page): Pagerfanta
     {
-        $response = $this->repository->getPaginatedIssues($page, $this->issuesPerPage);
-        $content = $this->responseMediator->getContent($response);
+        $response = $this->repository->getPaginatedIssuesResponse($page, $this->issuesPerPage, IssueState::ALL);
+        $content = array_map(
+            function (array $item) {
+                return new Issue($item);
+            },
+            $this->parseResponse($response)
+        );
 
-        $pagerAdapter = new FixedAdapter($this->getTotalResults($response), $content);
-        $pager = new Pagerfanta($pagerAdapter);
+        $pager = $this->pagerFactory->create($content, $this->getTotalResultsCount($response));
         $pager->setMaxPerPage($this->issuesPerPage);
         $pager->setCurrentPage($page);
 
@@ -58,12 +62,31 @@ class GithubPaginatedDataManager
     }
 
     /**
+     * @param string $state
+     * @return int
+     */
+    public function getIssuesCountByState(string $state): int
+    {
+        $response = $this->repository->getPaginatedIssuesResponse(1, $this->issuesPerPage, $state);
+        $totalPages = $this->responseMediator->getTotalPagesCount($response);
+
+        if ($totalPages > 1) {
+            $lastPageResponse = $this->repository
+                ->getPaginatedIssuesResponse($totalPages, $this->issuesPerPage, $state);
+
+            return count($this->parseResponse($lastPageResponse)) + $this->issuesPerPage * ($totalPages - 1);
+        }
+
+        return count($this->parseResponse($response));
+    }
+
+    /**
      * @param ResponseInterface $response
      * @return int
      */
-    protected function getTotalResults(ResponseInterface $response): int
+    protected function getTotalResultsCount(ResponseInterface $response): int
     {
-        $totalPages = $this->responseMediator->getTotalResultsCount($response);
+        $totalPages = $this->responseMediator->getTotalPagesCount($response);
 
         return null !== $totalPages ? $totalPages * $this->issuesPerPage : $this->issuesPerPage;
     }

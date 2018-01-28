@@ -10,7 +10,7 @@ services:
                 operations:
                     getPaginatedIssues:
                         httpMethod: 'GET'
-                        uri: '/issues?page={page}&per_page={per_page}'
+                        uri: '/issues?page={page}&per_page={per_page}&state={state}'
                         parameters:
                             page:
                                 location: uri
@@ -19,6 +19,10 @@ services:
                             per_page:
                                 location: uri
                                 type: integer
+                                required: true
+                            state:
+                                location: uri
+                                type: string
                                 required: true
                     getSingleIssue:
                         httpMethod: 'GET'
@@ -67,10 +71,18 @@ services:
         arguments:
             - '@app.github.client'
 
+    app.github.data_manager:
+        class: App\Manager\GithubDataManager
+        public: true
+        arguments:
+            - '@app.github.repository'
+            - '@App\Client\GithubResponseMediator'
+
     app.github.paginated_data_manager:
         class: App\Manager\GithubPaginatedDataManager
         public: true
         arguments:
             - '@app.github.repository'
             - '@App\Client\GithubResponseMediator'
+            - '@App\Factory\FixedPagerFactory'
             - '%env(ISSUES_PER_PAGE)%'

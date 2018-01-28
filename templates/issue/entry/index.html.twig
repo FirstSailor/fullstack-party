@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {# @var issue \App\Model\Issue #}
+
+    <div class="row content issue-entry-container">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="row">
+                <div class="col-md-12 back-link">
+                    <a href="{{ path('app.issue.list_issues') }}">
+                        {{ 'issues.entry.back_to_list'|trans }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body issue-item-container">
+                            <div class="title-container">
+                                {{ issue.title }} <span class="number">#{{ issue.number }}</span>
+                            </div>
+                            <div>
+                                <span class="label">
+                                    {% if issue.open %}
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                                    {% endif %}
+                                    {{ issue.state|upper }}
+                                </span>
+
+                                <span>{{ issue.owner }}</span>
+                                <span>opened this issue {{ issue.createdAt|date('Y-m-d') }} days ago</span>
+                                <span>{{ issue.commentsCount }} comments</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comments-container scrollable">
+            {# @var comment \App\Model\Comment #}
+            {% for comment in comments %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img src="{{ comment.ownerImageUrl }}" /> <span class="owner">{{ comment.owner }}</span> {{ comment.createdAt|date('Y-m-d') }}
+                                <hr>
+                                {{ comment.body }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

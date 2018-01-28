@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row content">
+        <div class="col-sm-6">
+            <div class="issues-left scrollable">
+                <div class="row issues-count-container">
+                    <div class="col-md-6 text-right">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <span class="open-issues-count">{{ openCount }} Open</span>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="fa fa-check-circle-o" aria-hidden="true"></i> <span class="closed-issues-count">{{ closedCount }} Closed</span>
+                    </div>
+                </div>
+
+                {% for item in pager.currentPageResults %}
+                    {% include 'issue/list/list_item.html.twig' with { 'item': item } %}
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="pagerfanta">
+                            {{ pagerfanta(pager) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 issues-right">
+            <div class="middle-item">
+                <div class="font-big">{{ 'issues.right_title'|trans }}</div>
+                <div class="font-medium">by <img src="{{ asset('build/images/testio-white.png') }}" /></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+login:
+    login_button: Login With GitHub
+
+logout: Logout
+
+issues:
+    right_title: Full Stack Developer Task
+    list:
+        by: by
+        opened: opened
+    entry:
+        back_to_list: Back to issues

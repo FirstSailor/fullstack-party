@@ -1,0 +1,31 @@
+{# @var item \App\Model\Issue #}
+
+<div class="row issue-item">
+    <div class="panel panel-default">
+        <div class="panel-body body">
+            <div class="col-md-1 state">
+                {% if item.open %}
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                {% else %}
+                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                {% endif %}
+            </div>
+            <div class="col-md-10">
+                <div class="title">
+                    <a href="{{ path('app.issue.single_issue', {'owner': item.owner, 'repo': item.repository, 'number': item.number}) }}">
+                        {{ item.title }}
+                    </a>
+                    {% for label in item.labels %}
+                        <span class="label" style="background-color: #{{ label.color }}">{{ label.name }}</span>
+                    {% endfor %}
+                </div>
+                <div class="description">
+                    #{{ item.number }} {{ 'issues.list.opened'|trans }} {{ item.createdAt|date('Y-m-d') }} {{ 'issues.list.by'|trans }} <span class="owner">{{ item.owner }}</span>
+                </div>
+            </div>
+            <div class="col-md-1 comments">
+                {{ item.commentsCount }}
+            </div>
+        </div>
+    </div>
+</div>

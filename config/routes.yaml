@@ -22,4 +22,3 @@ homepage:
 issue_controller:
     resource: App\Controller\IssueController
     type: annotation
-    prefix: /issue

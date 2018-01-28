@@ -1,0 +1,94 @@
+.issues-right {
+  background-image: linear-gradient(rgba(11, 15, 39, 0.70), rgba(11, 15, 39, 0.70)), url('../images/wv1.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+
+  .middle-item {
+    text-align: center;
+    color: $white;
+    position: absolute;
+    left:20%;
+    top:40%;
+
+    .font-big {
+      font-size: 48px;
+      font-family: $font;
+      font-weight: 300;
+    }
+
+    .font-medium {
+      font-size: 14px;
+    }
+
+    img {
+      height: 15px;
+      width: auto;
+    }
+  }
+}
+
+.issues-left {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  padding: 20px;
+  color: $black;
+
+  .issues-count-container {
+    padding-bottom: 20px;
+
+    .open-issues-count {
+    }
+
+    .closed-issues-count {
+      color: $grey-dark;
+      &:hover {
+        color: $green-light;
+      }
+    }
+  }
+}
+
+.issue-item {
+  .body {
+    margin: 10px;
+  }
+
+  .state {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #9fd533;
+  }
+
+  .title {
+    padding-bottom: 5px;
+    display: inline-block;
+    font-size: 16px;
+
+    a {
+      color: #333333;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+  }
+
+  .description {
+    color: #bfbfbf;
+    .owner {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .comments {
+    text-align: right;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #bfbfbf;
+  }
+}
