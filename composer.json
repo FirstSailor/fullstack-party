@@ -6,6 +6,7 @@
         "ext-iconv": "*",
         "guzzlehttp/guzzle-services": "^1.1",
         "jms/serializer-bundle": "^2.3",
+        "kevinrob/guzzle-cache-middleware": "^3.2",
         "knpuniversity/oauth2-client-bundle": "^1.16",
         "league/oauth2-github": "^2.0",
         "nesbot/carbon": "^1.22",

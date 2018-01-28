@@ -64,6 +64,7 @@ services:
         arguments:
             - '@app.github.client_description'
             - '@App\Manager\GithubUserManager'
+            - '%kernel.cache_dir%'
 
     app.github.repository:
         class: App\Repository\GithubRepository

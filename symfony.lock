@@ -59,6 +59,9 @@
             "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
         }
     },
+    "kevinrob/guzzle-cache-middleware": {
+        "version": "v3.2.1"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "1.16.1"
     },
