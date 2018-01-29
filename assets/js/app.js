@@ -6,4 +6,6 @@ require('../images/testio-dark.png');
 require('../images/wv1.jpg');
 
 import PerfectScrollbar from 'perfect-scrollbar';
-const ps = new PerfectScrollbar('.scrollable');
+if (document.querySelectorAll('.scrollable').length > 0) {
+    const ps = new PerfectScrollbar('.scrollable');
+}
