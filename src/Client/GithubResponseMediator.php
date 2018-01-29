@@ -41,16 +41,16 @@ class GithubResponseMediator
 
     /**
      * @param ResponseInterface $response
-     * @return array|null
+     * @return array
      */
-    public function getPaginationData(ResponseInterface $response): ?array
+    public function getPaginationData(ResponseInterface $response): array
     {
         if (!$response->hasHeader('Link')) {
-            return null;
+            return [];
         }
 
-        $header = self::getHeader($response, 'Link');
-        $pagination = array();
+        $header = $this->getHeader($response, 'Link');
+        $pagination = [];
         foreach (explode(',', $header) as $link) {
             preg_match('/<(.*)>; rel="(.*)"/i', trim($link, ','), $match);
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\Github\IssueState;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,8 +12,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class IssueController extends Controller
 {
     /**
-     * @Route("/issues/{page}", name="app.issue.list_issues", defaults={"page": 1}, requirements={"page": "\d+"})
+     * @Route(
+     *     "/issues/{page}",
+     *     name="app.issue.list_issues",
+     *     defaults={"page": 1},
+     *     requirements={"page": "\d+"}
+     * )
      * @Template("issue/list/index.html.twig")
+     * @Method("GET")
      *
      * @param int $page
      * @return array
@@ -39,6 +46,7 @@ class IssueController extends Controller
      *     requirements={"owner": "\S+", "repo": "\S+", "number": "\d+"}
      * )
      * @Template("issue/entry/index.html.twig")
+     * @Method("GET")
      *
      * @param string $owner
      * @param string $repo
