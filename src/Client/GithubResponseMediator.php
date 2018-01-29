@@ -27,8 +27,9 @@ class GithubResponseMediator
      */
     public function getContent(ResponseInterface $response, string $deserializationType = null)
     {
-        $body = (string) $response->getBody();
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
+            $body = (string) $response->getBody();
+
             if (null === $deserializationType) {
                 return \GuzzleHttp\json_decode($body, true);
             }
