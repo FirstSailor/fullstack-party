@@ -27,3 +27,12 @@ If you found this task it means we are looking for you!
 - Structure! WE LOVE STRUCTURE!
 - Maybe You have an idea how it should interact with users? Do it! Its on you!
 - Have fun!
+
+## Running project
+
+```bash
+composer install
+npm install
+npm run buildDev
+bin/console server:start
+```
